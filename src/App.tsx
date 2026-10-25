@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase, configured } from './lib/supabase'
 import { getGroup, createGroup } from './lib/data'
@@ -17,9 +18,10 @@ export default function App() {
   const [err, setErr] = useState('')
 
   useEffect(() => {
-    const f = () => setHash(location.hash)
-    addEventListener('hashchange', f)
-    return () => removeEventListener('hashchange', f)
+    const handleHashChange = () => setHash(location.hash)
+    addEventListener('hashchange', handleHashChange)
+
+    return () => removeEventListener('hashchange', handleHashChange)
   }, [])
 
   useEffect(() => {
@@ -34,17 +36,22 @@ export default function App() {
       setReady(true)
     })
 
-    const { data: s } = supabase.auth.onAuthStateChange((_e, ss) => {
-      setSession(ss)
+    const { data } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession)
     })
 
-    return () => s.subscription.unsubscribe()
+    return () => data.subscription.unsubscribe()
   }, [])
 
   useEffect(() => {
     setG(null)
     setErr('')
-    if (session) getGroup().then(setG).catch(e => setErr(e.message))
+
+    if (session) {
+      getGroup()
+        .then(setG)
+        .catch(error => setErr(error.message))
+    }
   }, [session])
 
   if (hash.startsWith('#/share/')) {
@@ -75,7 +82,9 @@ export default function App() {
         <section className="auth-card loading-card">
           <Brand />
           <div className="auth-spinner" />
-          <p className="auth-description">Preparing your savings space...</p>
+          <p className="auth-description">
+            Preparing your savings space...
+          </p>
         </section>
       </main>
     )
@@ -120,7 +129,6 @@ function Brand() {
   )
 }
 
-
 function Auth() {
   const [mode, setMode] = useState<'in' | 'up'>('in')
   const [email, setEmail] = useState('')
@@ -130,7 +138,7 @@ function Auth() {
   const [busy, setBusy] = useState(false)
   const [resetMode, setResetMode] = useState(false)
 
-  const go = async (e: React.FormEvent<HTMLFormElement>) => {
+  const go = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setMsg('')
     setBusy(true)
@@ -139,12 +147,18 @@ function Auth() {
       const cleanEmail = email.trim()
 
       if (resetMode) {
-        const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
-          redirectTo: window.location.origin,
-        })
+        const { error } = await supabase.auth.resetPasswordForEmail(
+          cleanEmail,
+          {
+            redirectTo: window.location.origin,
+          },
+        )
+
         if (error) throw error
 
-        setMsg('If an account exists for this email, password reset instructions will be sent.')
+        setMsg(
+          'If an account exists for this email, password reset instructions will be sent.',
+        )
         return
       }
 
@@ -153,22 +167,28 @@ function Auth() {
           email: cleanEmail,
           password: pw,
         })
+
         if (error) throw error
       } else {
         const { data, error } = await supabase.auth.signUp({
           email: cleanEmail,
           password: pw,
         })
+
         if (error) throw error
 
         setMsg(
           data.session
             ? 'Your account has been created.'
-            : 'Check your email to confirm your account, then sign in.'
+            : 'Check your email to confirm your account, then sign in.',
         )
       }
     } catch (error) {
-      setMsg(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
+      setMsg(
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong. Please try again.',
+      )
     } finally {
       setBusy(false)
     }
@@ -197,6 +217,7 @@ function Auth() {
                 ? 'Welcome back'
                 : 'Create your account'}
           </h1>
+
           <p className="auth-description">
             {resetMode
               ? 'Enter your email to receive a password reset link.'
@@ -207,7 +228,11 @@ function Auth() {
         </div>
 
         {!resetMode && (
-          <div className="auth-tabs" role="tablist" aria-label="Account access">
+          <div
+            className="auth-tabs"
+            role="tablist"
+            aria-label="Account access"
+          >
             <button
               type="button"
               role="tab"
@@ -217,6 +242,7 @@ function Auth() {
             >
               Sign in
             </button>
+
             <button
               type="button"
               role="tab"
@@ -245,6 +271,7 @@ function Auth() {
             <>
               <div className="auth-label-row">
                 <label htmlFor="zigama-password">Password</label>
+
                 {mode === 'in' && (
                   <button
                     className="auth-text-link"
@@ -263,17 +290,25 @@ function Auth() {
                 <input
                   id="zigama-password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder={mode === 'up' ? 'At least 8 characters' : 'Enter your password'}
+                  placeholder={
+                    mode === 'up'
+                      ? 'At least 8 characters'
+                      : 'Enter your password'
+                  }
                   minLength={8}
                   value={pw}
                   onChange={e => setPw(e.target.value)}
-                  autoComplete={mode === 'in' ? 'current-password' : 'new-password'}
+                  autoComplete={
+                    mode === 'in' ? 'current-password' : 'new-password'
+                  }
                   required
                 />
+
                 <button
                   className="password-toggle"
                   type="button"
                   onClick={() => setShowPassword(value => !value)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -282,11 +317,7 @@ function Auth() {
           )}
 
           {msg && (
-            <div
-              className="auth-message"
-              role="status"
-              aria-live="polite"
-            >
+            <div className="auth-message" role="status" aria-live="polite">
               {msg}
             </div>
           )}
@@ -328,202 +359,6 @@ function Auth() {
   )
 }
 
-  return (
-    <main className="auth-shell">
-      <section className="auth-layout">
-        <aside className="auth-story">
-          <Brand />
-
-          <div className="story-content">
-            <span className="story-eyebrow">
-              YOUR COMMUNITY. YOUR FUTURE.
-            </span>
-
-            <h1>
-              Save together.
-              <br />
-              <span>Grow together.</span>
-            </h1>
-
-            <p className="story-description">
-              Small contributions. Stronger futures. A clearer, simpler way
-              to manage your ikimina, track contributions, and build financial
-              progress together.
-            </p>
-
-            <div className="story-feature">
-              <span className="feature-icon">↗</span>
-              <div>
-                <strong>Your group, in one place</strong>
-                <p>Contributions. Records. Progress.</p>
-              </div>
-            </div>
-          </div>
-
-          <p className="story-footer">
-            Built for saving together <span>·</span> © 2026 Zigama
-          </p>
-        </aside>
-
-        <section className="auth-form-side">
-          <div className="mobile-brand">
-            <Brand />
-          </div>
-
-          <div className="auth-form-content">
-            <span className="form-eyebrow">
-              {resetMode
-                ? 'ACCOUNT RECOVERY'
-                : mode === 'in'
-                  ? 'WELCOME BACK'
-                  : 'GET STARTED'}
-            </span>
-
-            <h2>
-              {resetMode
-                ? 'Reset your password'
-                : mode === 'in'
-                  ? 'Sign in to Zigama'
-                  : 'Create your account'}
-            </h2>
-
-            <p className="auth-description">
-              {resetMode
-                ? 'Enter your email and we will send you password reset instructions.'
-                : mode === 'in'
-                  ? 'Enter your details to access your savings group.'
-                  : 'Create an account to start managing your savings group.'}
-            </p>
-
-            <form className="auth-form" onSubmit={go}>
-              <label htmlFor="zigama-email">Email address</label>
-              <input
-                id="zigama-email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                autoComplete="email"
-                required
-              />
-
-              {!resetMode && (
-                <>
-                  <label htmlFor="zigama-password">Password</label>
-                  <div className="password-wrap">
-                    <input
-                      id="zigama-password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="At least 8 characters"
-                      minLength={8}
-                      value={pw}
-                      onChange={e => setPw(e.target.value)}
-                      autoComplete={
-                        mode === 'in' ? 'current-password' : 'new-password'
-                      }
-                      required
-                    />
-                    <button
-                      className="password-toggle"
-                      type="button"
-                      onClick={() => setShowPassword(v => !v)}
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    >
-                      {showPassword ? 'Hide' : 'Show'}
-                    </button>
-                  </div>
-                </>
-              )}
-
-              {msg && (
-                <div className="auth-message" role="status">
-                  {msg}
-                </div>
-              )}
-
-              <button className="auth-primary" type="submit" disabled={busy}>
-                {busy
-                  ? 'Please wait...'
-                  : resetMode
-                    ? 'Send reset instructions'
-                    : mode === 'in'
-                      ? 'Sign in to your account'
-                      : 'Create account'}
-              </button>
-            </form>
-
-            {mode === 'in' && !resetMode && (
-              <button
-                className="auth-text-link forgot-link"
-                type="button"
-                onClick={() => setResetMode(true)}
-              >
-                Forgot password?
-              </button>
-            )}
-
-            <div className="auth-divider">
-              <span> {resetMode ? 'Remember your password?' : 'OR'} </span>
-            </div>
-
-            <p className="auth-switch">
-              {resetMode ? (
-                <button
-                  className="auth-text-link"
-                  type="button"
-                  onClick={() => {
-                    setResetMode(false)
-                    setMsg('')
-                  }}
-                >
-                  Back to sign in
-                </button>
-              ) : mode === 'in' ? (
-                <>
-                  Don't have an account?{' '}
-                  <button
-                    className="auth-text-link"
-                    type="button"
-                    onClick={() => {
-                      setMode('up')
-                      setMsg('')
-                    }}
-                  >
-                    Create account
-                  </button>
-                </>
-              ) : (
-                <>
-                  Already have an account?{' '}
-                  <button
-                    className="auth-text-link"
-                    type="button"
-                    onClick={() => {
-                      setMode('in')
-                      setMsg('')
-                    }}
-                  >
-                    Sign in
-                  </button>
-                </>
-              )}
-            </p>
-
-            <div className="auth-security">
-              <span className="security-icon">✓</span>
-              <p>
-                Your account is protected by secure authentication.
-              </p>
-            </div>
-          </div>
-
-          <p className="mobile-footer">Built for saving together · © 2026 Zigama</p>
-        </section>
-      </section>
-    </main>
-  )
-}
-
 function Setup({ onDone }: { onDone: (g: G) => void }) {
   const [n, setN] = useState('')
   const [a, setA] = useState('')
@@ -531,8 +366,9 @@ function Setup({ onDone }: { onDone: (g: G) => void }) {
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
 
-  const go = async (e: React.FormEvent) => {
+  const go = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const bad = checkAmount(Number(a))
 
     if (bad || n.trim().length < 2) {
@@ -544,9 +380,12 @@ function Setup({ onDone }: { onDone: (g: G) => void }) {
     setMsg('')
 
     try {
-      onDone(await createGroup(n.trim(), Number(a), f))
-    } catch (x) {
-      setMsg((x as Error).message)
+      const group = await createGroup(n.trim(), Number(a), f)
+      onDone(group)
+    } catch (error) {
+      setMsg(
+        error instanceof Error ? error.message : 'Could not create your group.',
+      )
     } finally {
       setBusy(false)
     }
@@ -559,6 +398,7 @@ function Setup({ onDone }: { onDone: (g: G) => void }) {
 
         <span className="form-eyebrow">YOUR GROUP STARTS HERE</span>
         <h1>Set up your ikimina</h1>
+
         <p className="auth-description">
           Three simple details and your group is ready.
         </p>
@@ -574,7 +414,9 @@ function Setup({ onDone }: { onDone: (g: G) => void }) {
             required
           />
 
-          <label htmlFor="group-amount">Contribution per member (RWF)</label>
+          <label htmlFor="group-amount">
+            Contribution per member (RWF)
+          </label>
           <input
             id="group-amount"
             type="number"
@@ -586,7 +428,9 @@ function Setup({ onDone }: { onDone: (g: G) => void }) {
             required
           />
 
-          <label htmlFor="group-frequency">How often do you contribute?</label>
+          <label htmlFor="group-frequency">
+            How often do you contribute?
+          </label>
           <select
             id="group-frequency"
             value={f}
@@ -610,5 +454,4 @@ function Setup({ onDone }: { onDone: (g: G) => void }) {
     </main>
   )
 }
-
      

@@ -1,0 +1,542 @@
+
+/* =========================================
+   ZIGAMA AUTH — PREMIUM FINTECH UI
+   Palette: Midnight Navy + Electric Blue
+========================================= */
+
+.zig-auth-page {
+  --zig-green: #4f46e5;
+  --zig-green-dark: #3730a3;
+  --zig-green-light: #eef2ff;
+  --zig-text: #171b34;
+  --zig-muted: #777d95;
+  --zig-border: #e7e9f2;
+
+  min-height: 100vh;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f6fc;
+  color: var(--zig-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.zig-auth-page *,
+.zig-auth-page *::before,
+.zig-auth-page *::after {
+  box-sizing: border-box;
+}
+
+.zig-auth-shell {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  width: min(1080px, 100%);
+  min-height: 680px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(231, 233, 242, 0.85);
+  border-radius: 26px;
+  box-shadow: 0 30px 90px rgba(29, 35, 80, 0.09);
+}
+
+/* LEFT BRAND PANEL */
+
+.zig-auth-brand {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 42px;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 15% 90%,
+      rgba(129, 140, 248, 0.26),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(56, 189, 248, 0.16),
+      transparent 40%
+    ),
+    linear-gradient(145deg, #171a38 0%, #10152d 55%, #101027 100%);
+}
+
+.zig-auth-brand::before {
+  position: absolute;
+  z-index: -1;
+  top: 18%;
+  right: -115px;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  box-shadow:
+    0 0 0 35px rgba(255, 255, 255, 0.025),
+    0 0 0 75px rgba(255, 255, 255, 0.018);
+}
+
+.zig-auth-brand::after {
+  position: absolute;
+  z-index: -1;
+  right: 12%;
+  bottom: 18%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.12);
+  filter: blur(45px);
+  content: "";
+  pointer-events: none;
+}
+
+.zig-brand-logo,
+.zig-mobile-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  width: fit-content;
+  color: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  text-decoration: none;
+}
+
+.zig-logo-mark {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #818cf8, #6366f1);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 900;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+}
+
+.zig-brand-message {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  margin: 70px 0;
+}
+
+.zig-eyebrow,
+.zig-form-kicker {
+  display: inline-block;
+  color: #a5b4fc;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.zig-brand-message h1 {
+  margin: 22px 0 18px;
+  color: #fff;
+  font-size: clamp(35px, 4vw, 48px);
+  font-weight: 750;
+  line-height: 1.13;
+  letter-spacing: -2px;
+}
+
+.zig-brand-message > p {
+  max-width: 360px;
+  margin: 0;
+  color: #b8bfd8;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.zig-brand-stat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 42px;
+  padding: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(12px);
+}
+
+.zig-stat-icon {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 13px;
+  background: rgba(129, 140, 248, 0.16);
+  color: #a5b4fc;
+  font-size: 24px;
+}
+
+.zig-brand-stat strong,
+.zig-brand-stat span {
+  display: block;
+}
+
+.zig-brand-stat strong {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.zig-brand-stat span {
+  color: #aeb7d2;
+  font-size: 11px;
+}
+
+.zig-brand-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: #aeb7d2;
+  font-size: 11px;
+}
+
+.zig-brand-footer > span:last-child {
+  margin-left: auto;
+}
+
+.zig-footer-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #818cf8;
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.6);
+}
+
+/* RIGHT FORM PANEL */
+
+.zig-auth-form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 52px 58px;
+  background: #fff;
+}
+
+.zig-auth-form-wrap {
+  width: 100%;
+  max-width: 390px;
+}
+
+.zig-mobile-logo {
+  display: none;
+  margin-bottom: 38px;
+  color: var(--zig-text);
+}
+
+.zig-form-heading {
+  margin-bottom: 32px;
+}
+
+.zig-form-kicker {
+  color: #6366f1;
+}
+
+.zig-form-heading h2 {
+  margin: 13px 0 10px;
+  color: #171b34;
+  font-size: clamp(27px, 3vw, 34px);
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+}
+
+.zig-form-heading p {
+  margin: 0;
+  color: #777d95;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* FORM AND INPUTS */
+
+.zig-form {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+}
+
+.zig-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #30354f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.zig-field input {
+  width: 100%;
+  min-width: 0;
+  height: 50px;
+  padding: 0 15px;
+  border: 1px solid #e4e7f0;
+  border-radius: 11px;
+  outline: none;
+  background: #fafbfe;
+  color: #171b34;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.zig-field input::placeholder {
+  color: #a3a8bb;
+}
+
+.zig-field input:hover {
+  border-color: #c8ccef;
+}
+
+.zig-field input:focus {
+  border-color: #6366f1;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.zig-password-wrap {
+  position: relative;
+}
+
+.zig-password-wrap input {
+  padding-right: 68px;
+}
+
+.zig-show-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  padding: 5px;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #6366f1;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.zig-forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -10px;
+}
+
+.zig-text-button {
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: #5b5ee8;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.zig-text-button:hover,
+.zig-auth-switch button:hover {
+  color: #3730a3;
+}
+
+.zig-text-button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+/* PRIMARY BUTTON */
+
+.zig-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 51px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  box-shadow: 0 7px 18px rgba(79, 70, 229, 0.2);
+  transition:
+    background 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.zig-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #5558e8, #4338ca);
+  box-shadow: 0 11px 25px rgba(79, 70, 229, 0.27);
+}
+
+.zig-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.zig-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.zig-submit span {
+  font-size: 18px;
+}
+
+/* FEEDBACK MESSAGES */
+
+.zig-message {
+  padding: 12px 13px;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.zig-message-error {
+  border-color: #fecaca;
+  background: #fff5f5;
+  color: #b42332;
+}
+
+.zig-message-success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+/* SIGN UP / SIGN IN SWITCH */
+
+.zig-auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 26px;
+  color: #777d95;
+  font-size: 12px;
+}
+
+.zig-auth-switch button {
+  padding: 3px;
+  border: 0;
+  background: transparent;
+  color: #5b5ee8;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.zig-security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 34px;
+  color: #9298aa;
+  font-size: 10px;
+  text-align: center;
+}
+
+.zig-security-note span {
+  color: #6366f1;
+  font-size: 14px;
+}
+
+/* TABLET */
+
+@media (max-width: 800px) {
+  .zig-auth-page {
+    padding: 18px;
+  }
+
+  .zig-auth-shell {
+    grid-template-columns: 1fr;
+    max-width: 510px;
+    min-height: auto;
+  }
+
+  .zig-auth-brand {
+    display: none;
+  }
+
+  .zig-auth-form-panel {
+    padding: 36px 30px;
+  }
+
+  .zig-mobile-logo {
+    display: inline-flex;
+  }
+
+  .zig-form-heading h2 {
+    font-size: 30px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 420px) {
+  .zig-auth-page {
+    padding: 0;
+    background: #fff;
+  }
+
+  .zig-auth-shell {
+    min-height: 100vh;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .zig-auth-form-panel {
+    align-items: flex-start;
+    padding: 28px 23px;
+  }
+
+  .zig-mobile-logo {
+    margin-bottom: 45px;
+  }
+
+  .zig-form-heading {
+    margin-bottom: 28px;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  .zig-auth-page *,
+  .zig-auth-page *::before,
+  .zig-auth-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition: none !important;
+  }
+}
